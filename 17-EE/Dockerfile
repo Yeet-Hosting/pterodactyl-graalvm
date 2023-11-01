@@ -14,12 +14,27 @@ MAINTAINER RikoDEV, <kontakt@riko.dev>
 #ENV DEBIAN_FRONTEND=noninteractive
 
 # Default to UTF-8 file.encoding
+RUN apk add tzdata
+RUN cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+RUN rm -r /usr/share/zoneinfo/Africa && \
+    rm -r /usr/share/zoneinfo/Antarctica && \
+    rm -r /usr/share/zoneinfo/Arctic && \
+    rm -r /usr/share/zoneinfo/Asia && \
+    rm -r /usr/share/zoneinfo/Atlantic && \
+    rm -r /usr/share/zoneinfo/Australia && \
+    rm -r /usr/share/zoneinfo/America  && \
+    rm -r /usr/share/zoneinfo/Indian && \
+    rm -r /usr/share/zoneinfo/Mexico && \
+    rm -r /usr/share/zoneinfo/Pacific && \
+    rm -r /usr/share/zoneinfo/Chile && \
+    rm -r /usr/share/zoneinfo/Canada
+RUN echo "Europe/Berlin" >  /etc/timezone
+
+ENV TZ Europe/Berlin
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 RUN apk update && \
     apk add --no-cache curl ca-certificates openssl git tar sqlite fontconfig tzdata iproute2 && \
-    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
-    locale-gen && \
     case ${TARGETPLATFORM} in \
         "linux/amd64")  ARCH=linux-amd64  ;; \
         "linux/arm64")  ARCH=linux-aarch64  ;; \
